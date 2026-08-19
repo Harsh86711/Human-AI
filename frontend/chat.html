@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>XYZ AI Chat</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #070b14;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .chat-container {
+            max-width: 1200px;
+            margin: auto;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            padding: 18px 35px;
+            border-bottom: 1px solid #26314a;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .role {
+            color: #5ddcff;
+            font-size: 17px;
+            padding: 10px 18px;
+            border: 1px solid #34415f;
+            border-radius: 25px;
+        }
+
+
+        /* =========================
+           LANGUAGE
+        ========================= */
+
+        .language-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .language-box label {
+            color: #8fa4d8;
+            font-size: 15px;
+        }
+
+        #languageSelect {
+            padding: 10px 14px;
+
+            border-radius: 10px;
+
+            border: 1px solid #34415f;
+
+            background: #111827;
+
+            color: white;
+
+            font-size: 15px;
+
+            outline: none;
+
+            cursor: pointer;
+        }
+
+        #languageSelect:focus {
+            border-color: #4f6cff;
+        }
+
+
+        /* =========================
+           AVATAR
+        ========================= */
+
+        .avatar-area {
+            text-align: center;
+
+            padding: 18px;
+
+            border-bottom: 1px solid #26314a;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+
+            margin: auto;
+
+            border-radius: 50%;
+
+            background: linear-gradient(
+                135deg,
+                #4f6cff,
+                #5ddcff
+            );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 52px;
+
+            box-shadow:
+                0 0 25px rgba(79,108,255,0.5);
+
+            transition: transform 0.2s;
+        }
+
+        .avatar.speaking {
+            animation: avatarSpeaking 0.8s infinite alternate;
+        }
+
+        .avatar.listening {
+            animation: avatarListening 0.8s infinite alternate;
+        }
+
+        @keyframes avatarSpeaking {
+
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.08);
+            }
+
+        }
+
+        @keyframes avatarListening {
+
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.06);
+            }
+
+        }
+
+        .avatar-status {
+            margin-top: 9px;
+
+            color: #8fa4d8;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           MESSAGES
+        ========================= */
+
+        .messages {
+            flex: 1;
+
+            padding: 30px;
+
+            overflow-y: auto;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+        .message {
+            padding: 15px 18px;
+
+            margin-bottom: 15px;
+
+            border-radius: 15px;
+
+            max-width: 75%;
+
+            line-height: 1.5;
+
+            white-space: pre-line;
+
+            font-size: 16px;
+        }
+
+        .ai {
+            background: #151e32;
+
+            margin-right: auto;
+        }
+
+        .user {
+            background: #263b78;
+
+            margin-left: auto;
+        }
+
+
+        /* =========================
+           INPUT
+        ========================= */
+
+        .input-area {
+            display: flex;
+
+            gap: 10px;
+
+            padding: 18px;
+
+            border-top: 1px solid #26314a;
+
+            background: #070b14;
+        }
+
+        #messageInput {
+            flex: 1;
+
+            padding: 15px;
+
+            border-radius: 11px;
+
+            border: 1px solid #34415f;
+
+            background: #111827;
+
+            color: white;
+
+            font-size: 16px;
+
+            outline: none;
+        }
+
+        #messageInput:focus {
+            border-color: #4f6cff;
+        }
+
+        button {
+            padding: 14px 21px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background: #4f6cff;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #405be0;
+        }
+
+
+        /* =========================
+           MIC
+        ========================= */
+
+        #micButton {
+            background: #17213a;
+
+            border: 1px solid #34415f;
+
+            font-size: 20px;
+
+            min-width: 55px;
+        }
+
+        #micButton:hover {
+            background: #263b78;
+        }
+
+        #micButton.listening {
+            background: #d6336c;
+        }
+
+
+        /* =========================
+           STOP VOICE
+        ========================= */
+
+        #stopButton {
+            background: #17213a;
+
+            border: 1px solid #34415f;
+
+            min-width: 55px;
+        }
+
+        #stopButton:hover {
+            background: #263b78;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .header {
+                padding: 15px;
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .header-right {
+                justify-content: space-between;
+            }
+
+            .language-box label {
+                display: none;
+            }
+
+            .messages {
+                padding: 15px;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .input-area {
+                padding: 10px;
+            }
+
+            #stopButton {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="chat-container">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="header">
+
+        <h1>🤖 XYZ AI</h1>
+
+
+        <div class="header-right">
+
+
+            <!-- LANGUAGE SELECTOR -->
+
+            <div class="language-box">
+
+                <label for="languageSelect">
+                    🌐 Language
+                </label>
+
+
+                <select id="languageSelect"
+                        onchange="changeLanguage()">
+
+                    <option value="English">
+                        English
+                    </option>
+
+                    <option value="Hindi">
+                        हिन्दी
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ROLE -->
+
+            <div class="role" id="role">
+                Student
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         AI AVATAR
+    ====================================================== -->
+
+    <div class="avatar-area">
+
+        <div class="avatar"
+             id="avatar">
+
+            🤖
+
+        </div>
+
+
+        <div class="avatar-status"
+             id="avatarStatus">
+
+            Ready to help
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CHAT
+    ====================================================== -->
+
+    <div class="messages"
+         id="messages">
+
+
+        <div class="message ai">
+
+            Hello! 👋 I'm XYZ AI.
+            How can I help you today?
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         INPUT AREA
+    ====================================================== -->
+
+    <div class="input-area">
+
+
+        <input
+            type="text"
+            id="messageInput"
+            placeholder="Ask XYZ AI something..."
+            autocomplete="off"
+        >
+
+
+        <!-- MICROPHONE -->
+
+        <button
+            id="micButton"
+            onclick="startListening()"
+            title="Speak">
+
+            🎤
+
+        </button>
+
+
+        <!-- STOP SPEECH -->
+
+        <button
+            id="stopButton"
+            onclick="stopSpeaking()"
+            title="Stop AI voice">
+
+            🔇
+
+        </button>
+
+
+        <!-- SEND -->
+
+        <button
+            onclick="sendMessage()">
+
+            Send
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+// ============================================================
+// ROLE
+// ============================================================
+
+const role =
+    localStorage.getItem("userRole") || "Student";
+
+
+document.getElementById("role").innerText =
+    role;
+
+
+
+// ============================================================
+// LANGUAGE
+// ============================================================
+
+let selectedLanguage =
+    localStorage.getItem("language") || "English";
+
+
+const languageSelect =
+    document.getElementById("languageSelect");
+
+
+languageSelect.value =
+    selectedLanguage;
+
+
+
+// ============================================================
+// CHANGE LANGUAGE
+// ============================================================
+
+function changeLanguage() {
+
+
+    selectedLanguage =
+        languageSelect.value;
+
+
+    // Save language
+
+    localStorage.setItem(
+        "language",
+        selectedLanguage
+    );
+
+
+    const messages =
+        document.getElementById(
+            "messages"
+        );
+
+
+    const message =
+        document.createElement(
+            "div"
+        );
+
+
+    message.className =
+        "message ai";
+
+
+    if (
+        selectedLanguage === "Hindi"
+    ) {
+
+        message.innerText =
+            "भाषा हिन्दी में बदल दी गई है। अब आप हिन्दी में बात कर सकते हैं।";
+
+    } else {
+
+        message.innerText =
+            "Language changed to English. You can now chat in English.";
+
+    }
+
+
+    messages.appendChild(
+        message
+    );
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+
+// ============================================================
+// TEXT TO SPEECH
+// ============================================================
+
+function speakText(text) {
+
+
+    if (
+        !("speechSynthesis" in window)
+    ) {
+
+        console.log(
+            "Text-to-Speech is not supported."
+        );
+
+        return;
+
+    }
+
+
+    // Stop old speech
+
+    window.speechSynthesis.cancel();
+
+
+    const speech =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    // Language
+
+    if (
+        selectedLanguage === "Hindi"
+    ) {
+
+        speech.lang = "hi-IN";
+
+    } else {
+
+        speech.lang = "en-IN";
+
+    }
+
+
+    speech.rate =
+        0.95;
+
+
+    speech.pitch =
+        1;
+
+
+    speech.volume =
+        1;
+
+
+    // Avatar speaking
+
+    const avatar =
+        document.getElementById(
+            "avatar"
+        );
+
+
+    const status =
+        document.getElementById(
+            "avatarStatus"
+        );
+
+
+    avatar.classList.add(
+        "speaking"
+    );
+
+
+    status.innerText =
+        "Speaking...";
+
+
+    speech.onend =
+        function() {
+
+            avatar.classList.remove(
+                "speaking"
+            );
+
+            status.innerText =
+                "Ready to help";
+
+        };
+
+
+    speech.onerror =
+        function() {
+
+            avatar.classList.remove(
+                "speaking"
+            );
+
+            status.innerText =
+                "Ready to help";
+
+        };
+
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+
+// ============================================================
+// STOP SPEAKING
+// ============================================================
+
+function stopSpeaking() {
+
+
+    if (
+        "speechSynthesis"
+        in window
+    ) {
+
+        window.speechSynthesis.cancel();
+
+    }
+
+
+    document
+        .getElementById("avatar")
+        .classList.remove(
+            "speaking"
+        );
+
+
+    document
+        .getElementById("avatarStatus")
+        .innerText =
+        "Ready to help";
+
+}
+
+
+
+// ============================================================
+// SPEECH TO TEXT
+// ============================================================
+
+let recognition =
+    null;
+
+
+function startListening() {
+
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+        alert(
+            "Speech recognition is not supported. Please use Google Chrome."
+        );
+
+        return;
+
+    }
+
+
+    // Create recognition
+
+    recognition =
+        new SpeechRecognition();
+
+
+    recognition.continuous =
+        false;
+
+
+    recognition.interimResults =
+        false;
+
+
+    // Selected language
+
+    if (
+        selectedLanguage === "Hindi"
+    ) {
+
+        recognition.lang =
+            "hi-IN";
+
+    } else {
+
+        recognition.lang =
+            "en-IN";
+
+    }
+
+
+    const micButton =
+        document.getElementById(
+            "micButton"
+        );
+
+
+    const avatar =
+        document.getElementById(
+            "avatar"
+        );
+
+
+    const status =
+        document.getElementById(
+            "avatarStatus"
+        );
+
+
+    micButton.classList.add(
+        "listening"
+    );
+
+
+    micButton.innerText =
+        "🔴";
+
+
+    avatar.classList.add(
+        "listening"
+    );
+
+
+    status.innerText =
+        "Listening...";
+
+
+    // ========================================================
+    // RESULT
+    // ========================================================
+
+    recognition.onresult =
+        function(event) {
+
+
+            const transcript =
+                event
+                    .results[0][0]
+                    .transcript;
+
+
+            document
+                .getElementById(
+                    "messageInput"
+                )
+                .value =
+                transcript;
+
+
+            // Automatically send
+
+            sendMessage();
+
+        };
+
+
+    // ========================================================
+    // END
+    // ========================================================
+
+    recognition.onend =
+        function() {
+
+
+            micButton.classList.remove(
+                "listening"
+            );
+
+
+            micButton.innerText =
+                "🎤";
+
+
+            avatar.classList.remove(
+                "listening"
+            );
+
+
+            status.innerText =
+                "Ready to help";
+
+        };
+
+
+    // ========================================================
+    // ERROR
+    // ========================================================
+
+    recognition.onerror =
+        function(event) {
+
+
+            console.error(
+                "Microphone error:",
+                event.error
+            );
+
+
+            micButton.classList.remove(
+                "listening"
+            );
+
+
+            micButton.innerText =
+                "🎤";
+
+
+            avatar.classList.remove(
+                "listening"
+            );
+
+
+            status.innerText =
+                "Microphone error";
+
+
+            if (
+                event.error ===
+                "not-allowed"
+            ) {
+
+                alert(
+                    "Microphone permission denied. Please allow microphone access in Chrome."
+                );
+
+            }
+
+            else if (
+                event.error ===
+                "no-speech"
+            ) {
+
+                alert(
+                    "No speech detected. Please try again."
+                );
+
+            }
+
+        };
+
+
+    // Start
+
+    try {
+
+        recognition.start();
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Recognition could not start:",
+            error
+        );
+
+    }
+
+}
+
+
+
+// ============================================================
+// SEND MESSAGE
+// ============================================================
+
+async function sendMessage() {
+
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+
+    const message =
+        input.value.trim();
+
+
+    if (
+        message === ""
+    ) {
+
+        return;
+
+    }
+
+
+    const messages =
+        document.getElementById(
+            "messages"
+        );
+
+
+    // ========================================================
+    // USER MESSAGE
+    // ========================================================
+
+    const userMessage =
+        document.createElement(
+            "div"
+        );
+
+
+    userMessage.className =
+        "message user";
+
+
+    userMessage.innerText =
+        message;
+
+
+    messages.appendChild(
+        userMessage
+    );
+
+
+    // Clear
+
+    input.value = "";
+
+
+    // ========================================================
+    // AI MESSAGE
+    // ========================================================
+
+    const aiMessage =
+        document.createElement(
+            "div"
+        );
+
+
+    aiMessage.className =
+        "message ai";
+
+
+    aiMessage.innerText =
+        "Thinking...";
+
+
+    messages.appendChild(
+        aiMessage
+    );
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+
+    document
+        .getElementById(
+            "avatarStatus"
+        )
+        .innerText =
+        "Thinking...";
+
+
+    // ========================================================
+    // FLASK API
+    // ========================================================
+
+    try {
+
+
+        const response =
+            await fetch(
+                "/api/chat",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    credentials:
+                        "same-origin",
+
+                    body:
+                        JSON.stringify({
+
+                            message:
+                                message,
+
+                            role:
+                                role,
+
+                            language:
+                                selectedLanguage
+
+                        })
+
+                }
+            );
+
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                "Server error: " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        // ====================================================
+        // AI RESPONSE
+        // ====================================================
+
+        if (
+            data.response
+        ) {
+
+
+            aiMessage.innerText =
+                data.response;
+
+
+            // Speak response
+
+            speakText(
+                data.response
+            );
+
+
+        }
+
+        else {
+
+
+            const fallback =
+                selectedLanguage === "Hindi"
+                    ? "माफ कीजिए, मैं आपका प्रश्न समझ नहीं पाया।"
+                    : "Sorry, I couldn't understand your request.";
+
+
+            aiMessage.innerText =
+                fallback;
+
+
+            speakText(
+                fallback
+            );
+
+        }
+
+
+    }
+
+    catch (error) {
+
+
+        console.error(
+            "Chat Error:",
+            error
+        );
+
+
+        aiMessage.innerText =
+            "Sorry, I couldn't connect to the server.";
+
+
+        document
+            .getElementById(
+                "avatarStatus"
+            )
+            .innerText =
+            "Connection error";
+
+    }
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+
+// ============================================================
+// ENTER KEY
+// ============================================================
+
+document
+    .getElementById(
+        "messageInput"
+    )
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                sendMessage();
+
+            }
+
+        }
+    );
+
+
+
+// ============================================================
+// STOP SPEECH WHEN PAGE CLOSES
+// ============================================================
+
+window.addEventListener(
+    "beforeunload",
+    function() {
+
+
+        if (
+            "speechSynthesis"
+            in window
+        ) {
+
+            window.speechSynthesis.cancel();
+
+        }
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

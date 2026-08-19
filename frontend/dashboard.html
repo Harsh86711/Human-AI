@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>XYZ AI - Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #070b14;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+
+            background:
+                radial-gradient(circle at 15% 15%,
+                    #233a80 0%,
+                    transparent 30%),
+                radial-gradient(circle at 85% 75%,
+                    #482078 0%,
+                    transparent 30%),
+                #070b14;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            padding: 25px 0;
+        }
+
+        /* HEADER */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #26314a;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            font-size: 24px;
+        }
+
+        .logo h1 {
+            font-size: 22px;
+        }
+
+        .logo p {
+            color: #8b94a7;
+            font-size: 12px;
+        }
+
+        .role-badge {
+            padding: 10px 16px;
+            border: 1px solid #34415f;
+            border-radius: 25px;
+            color: #5ddcff;
+            background: rgba(21, 30, 50, 0.8);
+        }
+
+        /* WELCOME */
+
+        .welcome {
+            margin-top: 40px;
+        }
+
+        .welcome h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .welcome h2 span {
+            background: linear-gradient(90deg, #00d4ff, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .welcome p {
+            color: #8d98ad;
+            line-height: 1.6;
+        }
+
+        /* GRID */
+
+        .dashboard-grid {
+            margin-top: 35px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        /* CARD */
+
+        .card {
+            padding: 25px;
+            border-radius: 18px;
+            background: rgba(18, 25, 42, 0.85);
+            border: 1px solid #26334e;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #657cff;
+            box-shadow: 0 15px 40px rgba(53, 75, 150, 0.2);
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: #8d98ad;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .card button {
+            margin-top: 18px;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 9px;
+            background: #4f6cff;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .card button:hover {
+            background: #405be0;
+        }
+
+        /* DATA BOX */
+
+        .data-box {
+            margin-top: 18px;
+            padding: 15px;
+            background: #111827;
+            border-radius: 10px;
+            border: 1px solid #26314a;
+            display: none;
+            white-space: pre-line;
+            line-height: 1.7;
+        }
+
+        .data-box.show {
+            display: block;
+        }
+
+        .data-value {
+            font-size: 28px;
+            color: #5ddcff;
+            font-weight: bold;
+        }
+
+        .data-label {
+            margin-top: 5px;
+            color: #7f8aa0;
+            font-size: 13px;
+        }
+
+        /* CHAT */
+
+        .chat-card {
+            grid-column: span 2;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(79, 108, 255, 0.15),
+                    rgba(93, 220, 255, 0.08)
+                );
+
+            border-color: #344b85;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #626d82;
+            font-size: 12px;
+        }
+
+        /* MOBILE */
+
+        @media(max-width: 700px) {
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-card {
+                grid-column: span 1;
+            }
+
+            .welcome h2 {
+                font-size: 26px;
+            }
+
+            .role-badge {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="background"></div>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ✦
+            </div>
+
+            <div>
+                <h1>XYZ AI</h1>
+
+                <p>
+                    School Assistant
+                </p>
+            </div>
+
+        </div>
+
+        <div
+            class="role-badge"
+            id="roleBadge">
+            Student
+        </div>
+
+    </header>
+
+
+    <!-- WELCOME -->
+
+    <section class="welcome">
+
+        <h2>
+            Welcome to your
+            <span>Dashboard</span>
+        </h2>
+
+        <p id="welcomeText">
+            Manage your school information with XYZ AI.
+        </p>
+
+    </section>
+
+
+    <!-- DASHBOARD -->
+
+    <section
+        class="dashboard-grid"
+        id="dashboardGrid">
+    </section>
+
+
+    <footer>
+        Powered by <strong>XYZ AI</strong>
+    </footer>
+
+</div>
+
+
+<script>
+
+    // ==================================================
+    // ROLE
+    // ==================================================
+
+    const role =
+        localStorage.getItem("userRole") || "Student";
+
+
+    const roleBadge =
+        document.getElementById("roleBadge");
+
+    const welcomeText =
+        document.getElementById("welcomeText");
+
+    const dashboardGrid =
+        document.getElementById("dashboardGrid");
+
+
+    roleBadge.innerText = role;
+
+
+    // ==================================================
+    // ROLE DATA
+    // ==================================================
+
+    const roleData = {
+
+        Student: {
+
+            welcome:
+                "Welcome Student! Manage your attendance, marks, timetable and school information.",
+
+            cards: [
+
+                {
+                    icon: "📊",
+                    title: "Attendance",
+                    description:
+                        "Check your current attendance and today's status.",
+                    button: "Check Attendance",
+                    action: "checkAttendance"
+                },
+
+                {
+                    icon: "📚",
+                    title: "Academics",
+                    description:
+                        "View your marks and academic performance.",
+                    button: "View Marks",
+                    action: "showMarks"
+                },
+
+                {
+                    icon: "🗓️",
+                    title: "Timetable",
+                    description:
+                        "View your weekly school timetable.",
+                    button: "View Timetable",
+                    action: "showTimetable"
+                },
+
+                {
+                    icon: "🏫",
+                    title: "School Information",
+                    description:
+                        "View school timings, holidays and principal information.",
+                    button: "School Info",
+                    action: "showSchoolInfo"
+                },
+
+                {
+                    icon: "👨‍🏫",
+                    title: "Talk to Teacher",
+                    description:
+                        "Request assistance from your teacher.",
+                    button: "Talk to Teacher",
+                    action: "talkToTeacher"
+                },
+
+                {
+                    icon: "🏢",
+                    title: "School Management",
+                    description:
+                        "Contact school management for assistance.",
+                    button: "Contact Management",
+                    action: "contactManagement"
+                }
+
+            ]
+        },
+
+
+        Parent: {
+
+            welcome:
+                "Welcome Parent! Monitor your child's attendance and academic progress.",
+
+            cards: [
+
+                {
+                    icon: "📊",
+                    title: "Child Attendance",
+                    description:
+                        "Check your child's current attendance.",
+                    button: "Check Attendance",
+                    action: "checkAttendance"
+                },
+
+                {
+                    icon: "📚",
+                    title: "Academic Performance",
+                    description:
+                        "View your child's marks.",
+                    button: "View Marks",
+                    action: "showMarks"
+                },
+
+                {
+                    icon: "🗓️",
+                    title: "Timetable",
+                    description:
+                        "View your child's timetable.",
+                    button: "View Timetable",
+                    action: "showTimetable"
+                },
+
+                {
+                    icon: "🏫",
+                    title: "School Information",
+                    description:
+                        "View school timings and holidays.",
+                    button: "School Info",
+                    action: "showSchoolInfo"
+                },
+
+                {
+                    icon: "👨‍🏫",
+                    title: "Talk to Teacher",
+                    description:
+                        "Request a call from your child's teacher.",
+                    button: "Talk to Teacher",
+                    action: "talkToTeacher"
+                },
+
+                {
+                    icon: "🏢",
+                    title: "School Management",
+                    description:
+                        "Contact school management.",
+                    button: "Contact Management",
+                    action: "contactManagement"
+                }
+
+            ]
+        },
+
+
+        Teacher: {
+
+            welcome:
+                "Welcome Teacher! Manage student attendance and academic information.",
+
+            cards: [
+
+                {
+                    icon: "📊",
+                    title: "Student Attendance",
+                    description:
+                        "Check Rahul's current attendance.",
+                    button: "Check Attendance",
+                    action: "checkAttendance"
+                },
+
+                {
+                    icon: "✅",
+                    title: "Mark Present",
+                    description:
+                        "Mark Rahul present for today.",
+                    button: "Mark Present",
+                    action: "markPresent"
+                },
+
+                {
+                    icon: "❌",
+                    title: "Mark Absent",
+                    description:
+                        "Mark Rahul absent for today.",
+                    button: "Mark Absent",
+                    action: "markAbsent"
+                },
+
+                {
+                    icon: "📚",
+                    title: "Student Marks",
+                    description:
+                        "View Rahul's academic marks.",
+                    button: "View Marks",
+                    action: "showMarks"
+                },
+
+                {
+                    icon: "🗓️",
+                    title: "Timetable",
+                    description:
+                        "View the weekly timetable.",
+                    button: "View Timetable",
+                    action: "showTimetable"
+                }
+
+            ]
+        },
+
+
+        Principal: {
+
+            welcome:
+                "Welcome Principal! Monitor overall school performance and information.",
+
+            cards: [
+
+                {
+                    icon: "📊",
+                    title: "Overall Attendance",
+                    description:
+                        "View the school's overall attendance.",
+                    button: "Check Attendance",
+                    action: "checkOverallAttendance"
+                },
+
+                {
+                    icon: "📚",
+                    title: "Academic Performance",
+                    description:
+                        "View the school's academic performance.",
+                    button: "View Performance",
+                    action: "showPerformance"
+                },
+
+                {
+                    icon: "🗓️",
+                    title: "Timetable",
+                    description:
+                        "View the weekly timetable.",
+                    button: "View Timetable",
+                    action: "showTimetable"
+                },
+
+                {
+                    icon: "🏫",
+                    title: "School Information",
+                    description:
+                        "View school timings, holidays and principal information.",
+                    button: "School Info",
+                    action: "showSchoolInfo"
+                },
+
+                {
+                    icon: "🏢",
+                    title: "School Management",
+                    description:
+                        "Contact school management.",
+                    button: "Contact Management",
+                    action: "contactManagement"
+                }
+
+            ]
+        }
+
+    };
+
+
+    // ==================================================
+    // CURRENT ROLE
+    // ==================================================
+
+    const currentRole =
+        roleData[role] || roleData.Student;
+
+
+    welcomeText.innerText =
+        currentRole.welcome;
+
+
+    // ==================================================
+    // CREATE CARDS
+    // ==================================================
+
+    currentRole.cards.forEach(function(card, index) {
+
+        const cardElement =
+            document.createElement("div");
+
+        cardElement.className = "card";
+
+        cardElement.innerHTML = `
+
+            <div class="card-icon">
+                ${card.icon}
+            </div>
+
+            <h3>
+                ${card.title}
+            </h3>
+
+            <p>
+                ${card.description}
+            </p>
+
+            <button
+                onclick="${card.action}(${index})">
+                ${card.button}
+            </button>
+
+            <div
+                class="data-box"
+                id="box-${index}">
+            </div>
+        `;
+
+        dashboardGrid.appendChild(cardElement);
+    });
+
+
+    // ==================================================
+    // HELPER
+    // ==================================================
+
+    function getBox(index) {
+
+        const box =
+            document.getElementById(
+                "box-" + index
+            );
+
+        box.classList.add("show");
+
+        return box;
+    }
+
+
+    // ==================================================
+    // API HELPER
+    // ==================================================
+
+    async function askAI(message) {
+
+        const response =
+            await fetch("/api/chat", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    message: message,
+                    role: role
+
+                })
+            });
+
+
+        if (!response.ok) {
+            throw new Error(
+                "API request failed"
+            );
+        }
+
+
+        return await response.json();
+    }
+
+
+    // ==================================================
+    // ATTENDANCE
+    // ==================================================
+
+    async function checkAttendance(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Loading attendance...";
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/attendance/Rahul"
+                );
+
+            const data =
+                await response.json();
+
+            if (data.success) {
+
+                box.innerHTML = `
+
+                    <div class="data-value">
+                        ${data.attendance}%
+                    </div>
+
+                    <div class="data-label">
+                        Today's Status:
+                        ${data.today}
+                    </div>
+
+                    <div class="data-label">
+                        Class:
+                        ${data.class}
+                    </div>
+
+                    <div class="data-label">
+                        Roll No:
+                        ${data.roll_no}
+                    </div>
+                `;
+
+            } else {
+
+                box.innerText =
+                    data.message ||
+                    "Attendance not found.";
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to load attendance.";
+        }
+    }
+
+
+    // ==================================================
+    // MARKS
+    // ==================================================
+
+    async function showMarks(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Loading marks...";
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/marks/Rahul"
+                );
+
+            const data =
+                await response.json();
+
+            if (data.success) {
+
+                box.innerHTML = `
+
+                    <strong>Academic Marks</strong>
+
+                    <br><br>
+
+                    Mathematics:
+                    ${data.marks.Mathematics}
+
+                    <br>
+
+                    Science:
+                    ${data.marks.Science}
+
+                    <br>
+
+                    English:
+                    ${data.marks.English}
+                `;
+
+            } else {
+
+                box.innerText =
+                    "Marks not available.";
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to load marks.";
+        }
+    }
+
+
+    // ==================================================
+    // TIMETABLE
+    // ==================================================
+
+    async function showTimetable(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Loading timetable...";
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/timetable"
+                );
+
+            const data =
+                await response.json();
+
+            if (data.success) {
+
+                const t =
+                    data.timetable;
+
+                box.innerHTML = `
+
+                    <strong>Weekly Timetable</strong>
+
+                    <br><br>
+
+                    Monday:
+                    ${t.Monday}
+
+                    <br>
+
+                    Tuesday:
+                    ${t.Tuesday}
+
+                    <br>
+
+                    Wednesday:
+                    ${t.Wednesday}
+
+                    <br>
+
+                    Thursday:
+                    ${t.Thursday}
+
+                    <br>
+
+                    Friday:
+                    ${t.Friday}
+
+                    <br>
+
+                    Saturday:
+                    ${t.Saturday}
+                `;
+
+            } else {
+
+                box.innerText =
+                    "Timetable unavailable.";
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to load timetable.";
+        }
+    }
+
+
+    // ==================================================
+    // SCHOOL INFORMATION
+    // ==================================================
+
+    async function showSchoolInfo(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Loading school information...";
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/school-info"
+                );
+
+            const data =
+                await response.json();
+
+            if (data.success) {
+
+                const school =
+                    data.school;
+
+                box.innerHTML = `
+
+                    <strong>
+                        ${school.name}
+                    </strong>
+
+                    <br><br>
+
+                    🕐 School Timing:
+                    ${school.timings}
+
+                    <br>
+
+                    🎉 Next Holiday:
+                    ${school.next_holiday}
+
+                    <br>
+
+                    👨‍💼 Principal:
+                    ${school.principal}
+
+                    <br>
+
+                    🏢 Office Hours:
+                    ${school.office_hours}
+                `;
+
+            } else {
+
+                box.innerText =
+                    "School information unavailable.";
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to load school information.";
+        }
+    }
+
+
+    // ==================================================
+    // MARK PRESENT
+    // ==================================================
+
+    async function markPresent(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Marking Rahul present...";
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/attendance/Rahul/present",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        }
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            box.innerText =
+                data.message ||
+                "Rahul marked present.";
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to mark present.";
+        }
+    }
+
+
+    // ==================================================
+    // MARK ABSENT
+    // ==================================================
+
+    async function markAbsent(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Marking Rahul absent...";
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/attendance/Rahul/absent",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        }
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            box.innerText =
+                data.message ||
+                "Rahul marked absent.";
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to mark absent.";
+        }
+    }
+
+
+    // ==================================================
+    // PRINCIPAL OVERALL ATTENDANCE
+    // ==================================================
+
+    async function checkOverallAttendance(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Loading overall attendance...";
+
+        try {
+
+            const data =
+                await askAI(
+                    "What is the overall attendance?"
+                );
+
+            box.innerHTML = `
+
+                <div class="data-value">
+                    89.6%
+                </div>
+
+                <div class="data-label">
+                    Overall School Attendance
+                </div>
+
+                <br>
+
+                ${data.response || ""}
+            `;
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to load attendance.";
+        }
+    }
+
+
+    // ==================================================
+    // PRINCIPAL PERFORMANCE
+    // ==================================================
+
+    async function showPerformance(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Loading academic performance...";
+
+        try {
+
+            const data =
+                await askAI(
+                    "Show academic performance"
+                );
+
+            box.innerText =
+                data.response ||
+                "Performance data unavailable.";
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to load performance.";
+        }
+    }
+
+
+    // ==================================================
+    // TALK TO TEACHER
+    // ==================================================
+
+    async function talkToTeacher(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Preparing teacher request...";
+
+        const reason = prompt(
+            "Why do you want to contact the teacher?"
+        );
+
+        if (!reason) {
+
+            box.innerText =
+                "Request cancelled.";
+
+            return;
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/escalate/teacher",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            role: role,
+
+                            student: "Rahul",
+
+                            reason: reason
+                        })
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (data.success) {
+
+                box.innerHTML = `
+
+                    <strong>
+                        ✅ Request Submitted
+                    </strong>
+
+                    <br><br>
+
+                    Your request has been
+                    submitted to the teacher.
+
+                    <br><br>
+
+                    Request ID:
+                    <strong>
+                        ${data.request_id}
+                    </strong>
+                `;
+
+            } else {
+
+                box.innerText =
+                    data.message ||
+                    "Unable to submit request.";
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to connect to server.";
+        }
+    }
+
+
+    // ==================================================
+    // SCHOOL MANAGEMENT
+    // ==================================================
+
+    async function contactManagement(index) {
+
+        const box = getBox(index);
+
+        box.innerText =
+            "Preparing management request...";
+
+        const reason = prompt(
+            "Why do you want to contact school management?"
+        );
+
+        if (!reason) {
+
+            box.innerText =
+                "Request cancelled.";
+
+            return;
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/escalate/management",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            role: role,
+
+                            reason: reason
+                        })
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (data.success) {
+
+                box.innerHTML = `
+
+                    <strong>
+                        ✅ Request Submitted
+                    </strong>
+
+                    <br><br>
+
+                    Your request has been
+                    submitted to school management.
+
+                    <br><br>
+
+                    Request ID:
+                    <strong>
+                        ${data.request_id}
+                    </strong>
+                `;
+
+            } else {
+
+                box.innerText =
+                    data.message ||
+                    "Unable to submit request.";
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            box.innerText =
+                "Unable to connect to server.";
+        }
+    }
+
+
+    // ==================================================
+    // OPEN AI CHAT
+    // ==================================================
+
+    function openChat() {
+
+        window.location.href =
+            "/chat";
+    }
+
+
+    // ==================================================
+    // AI CHAT CARD
+    // ==================================================
+
+    const chatCard =
+        document.createElement("div");
+
+    chatCard.className =
+        "card chat-card";
+
+    chatCard.innerHTML = `
+
+        <div class="card-icon">
+            🤖
+        </div>
+
+        <h3>
+            XYZ AI Assistant
+        </h3>
+
+        <p>
+            Ask XYZ AI about attendance,
+            academics, timetable, holidays,
+            school information or request
+            human assistance.
+        </p>
+
+        <button
+            onclick="openChat()">
+            Open AI Chat →
+        </button>
+
+    `;
+
+    dashboardGrid.appendChild(
+        chatCard
+    );
+
+</script>
+
+</body>
+</html>

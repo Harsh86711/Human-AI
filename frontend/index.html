@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>XYZ AI - Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    #233a80 0%,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 80% 80%,
+                    #482078 0%,
+                    transparent 35%
+                ),
+                #070b14;
+
+            color: white;
+        }
+
+        .login-container {
+            width: 90%;
+            max-width: 420px;
+        }
+
+        .login-card {
+            padding: 35px;
+
+            border-radius: 22px;
+
+            background: rgba(18, 25, 42, 0.95);
+
+            border: 1px solid #34415f;
+
+            box-shadow:
+                0 25px 70px
+                rgba(0, 0, 0, 0.45);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            width: 75px;
+            height: 75px;
+
+            margin: auto;
+            margin-bottom: 15px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f6cff,
+                    #5ddcff
+                );
+
+            font-size: 42px;
+
+            box-shadow:
+                0 0 30px
+                rgba(79, 108, 255, 0.45);
+        }
+
+        .logo h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .logo p {
+            color: #8d98ad;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border-radius: 10px;
+
+            border: 1px solid #34415f;
+
+            background: #0f1728;
+
+            color: white;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #5d7cff;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(79, 108, 255, 0.12);
+        }
+
+        button {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f6cff,
+                    #5d7cff
+                );
+
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(79, 108, 255, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error {
+            display: none;
+
+            margin-bottom: 18px;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            background: rgba(220, 38, 38, 0.15);
+
+            border: 1px solid #7f1d1d;
+
+            color: #fca5a5;
+
+            font-size: 14px;
+        }
+
+        .demo {
+            margin-top: 25px;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background: #0f1728;
+
+            border: 1px solid #26314a;
+
+            color: #8d98ad;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+        }
+
+        .demo strong {
+            color: #5ddcff;
+        }
+
+        @media(max-width: 500px) {
+
+            .login-card {
+                padding: 25px;
+            }
+
+            .logo h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                🤖
+            </div>
+
+            <h1>XYZ AI</h1>
+
+            <p>School AI Assistant</p>
+
+        </div>
+
+
+        <div
+            class="error"
+            id="errorMessage"
+        ></div>
+
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter username"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="loginButton"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <div class="demo">
+
+            <strong>Demo Accounts</strong>
+
+            <br>
+
+            Student:
+            <b>student</b> /
+            <b>student123</b>
+
+            <br>
+
+            Parent:
+            <b>parent</b> /
+            <b>parent123</b>
+
+            <br>
+
+            Teacher:
+            <b>teacher</b> /
+            <b>teacher123</b>
+
+            <br>
+
+            Principal:
+            <b>principal</b> /
+            <b>principal123</b>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const username =
+            document
+                .getElementById("username")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        errorMessage.style.display =
+            "none";
+
+
+        loginButton.disabled =
+            true;
+
+        loginButton.innerText =
+            "Logging in...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/login",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        credentials: "same-origin",
+
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok ||
+                !data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Invalid username or password."
+                );
+            }
+
+
+            /*
+             * Dashboard ke existing
+             * JavaScript ke liye role save kar rahe hain.
+             */
+
+            localStorage.setItem(
+                "userRole",
+                data.role
+            );
+
+            localStorage.setItem(
+                "userName",
+                data.name
+            );
+
+
+            /*
+             * Login successful
+             */
+
+            window.location.href =
+                "/dashboard";
+
+        }
+
+        catch(error) {
+
+            errorMessage.innerText =
+                error.message ||
+                "Login failed.";
+
+            errorMessage.style.display =
+                "block";
+
+        }
+
+        finally {
+
+            loginButton.disabled =
+                false;
+
+            loginButton.innerText =
+                "Login";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
